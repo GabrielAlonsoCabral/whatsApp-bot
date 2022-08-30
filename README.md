@@ -1,5 +1,5 @@
 # WhatsApp Bot
-This is an WhatsApp Bot developed using Python, Twilio, Flask and Ngrok
+This is an WhatsApp Bot developed using Python, MongoDB, Twilio, Flask and Ngrok
 
 ## Preview
 
@@ -15,7 +15,7 @@ virtualenv venv
 source venv/bin/activate
 
 # Install dependencies
-pip3 install twilio flask ngrok
+pip3 install twilio flask ngrok 'pymongo[srv]'
 
 # setting ngrok
 ngrok config add-authtoken your_token_here
