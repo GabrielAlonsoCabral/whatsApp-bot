@@ -1,5 +1,5 @@
 from flask import Flask, request
-from src.Twilio.Bot import Bot
+from src.services.twilio.Bot import Bot
 from dotenv import load_dotenv
 load_dotenv()
 

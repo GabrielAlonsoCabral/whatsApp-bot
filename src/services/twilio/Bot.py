@@ -1,7 +1,8 @@
+from dotenv import dotenv_values
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.rest import Client
 from time import sleep
-from dotenv import dotenv_values
+from src.infra.repositories.MessageTemplateRepository import MessageTemplateRepository
 
 config = dotenv_values(".env")
 
@@ -10,37 +11,18 @@ class Bot:
         self.user_message = user_message
         self.client = Client(config["TWILIO_ACCOUNT_SID"],config["TWILIO_AUTH_TOKEN"])
         self.messagingResponse = MessagingResponse()
+        self.MessageTemplateRepository = MessageTemplateRepository()
 
     def __message(self):
         return self.messagingResponse.message()
 
-    def __getTemplates(self):
-        templates = [
-            {
-                "step":"0.0",
-                "message":"Olá, eu sou a Ci! A sua Atendente Virtual. \n \nComo que eu posso te ajudar ? \nDigite o número da opção desejada.",
-                "options":{
-                    "1.0":"Quero ter um Aplicativo para minha empresa!",
-                    "2.0":"Quero saber sobre a ferramenta de disparo de emails em massa!",
-                    "3.0":"Quero um Chatbot de WhatsApp para minha empresa!",
-                    "4.0": "Quero um site personalizado para minha empresa!",
-                    "5.0":"Quero um Software personalizado!",
-                    "6.0":"Quero saber mais sobre vocês.",
-                }
-            },
-            {
-                "step":"1.0",
-                "message":"Aplicativo para empresa",
-                "options":{
-                    "1.1":"teste"
-                }
-            }
-        ]
-
-        return templates
+    def __getTemplate(self):
+        messageTemplate = self.MessageTemplateRepository.findOne(condition={"active":True})
+        print(messageTemplate)
+        return messageTemplate['templates']
 
     def __getStep(self, step):
-        templates = self.__getTemplates()
+        templates = self.__getTemplate()
         return next(item for item in templates if item['step'] == step)
 
     def __getOptionsMessageByStep(self, step):
@@ -53,7 +35,7 @@ class Bot:
         return optionsMessage
 
     def listAllStepsOptions(self):
-        templates = self.__getTemplates()
+        templates = self.__getTemplate()
         allStepsOptions = []
 
         for template in templates:
@@ -73,7 +55,7 @@ class Bot:
         stepMessage = step["message"]
         optionsMessage = self.__getOptionsMessageByStep(step=stepNumber)
 
-        self.__message().body(stepMessage)
+        self.__message().body(stepMessage.replace('\\n','\n'))
         sleep(1)
-        self.__message().body(optionsMessage)
+        self.__message().body(optionsMessage.replace('\\n','\n'))
         return str(self.messagingResponse)
