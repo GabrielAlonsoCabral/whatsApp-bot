@@ -3,7 +3,7 @@ This is an WhatsApp Bot developed using Python, MongoDB, Twilio, Flask and Ngrok
 
 ## Preview
 
-missing field
+![alt text](preview-bot.jpeg)
 
 ## Usage
 
