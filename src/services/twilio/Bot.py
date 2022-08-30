@@ -18,7 +18,6 @@ class Bot:
 
     def __getTemplate(self):
         messageTemplate = self.MessageTemplateRepository.findOne(condition={"active":True})
-        print(messageTemplate)
         return messageTemplate['templates']
 
     def __getStep(self, step):
