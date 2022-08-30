@@ -24,6 +24,12 @@ ngrok http 3306
 Now you must insert ngrok https post on twilio console.
 
 
-# Start the App - does not require venv activated
+# Start App from using zsh
 zsh commands/dev.zsh
+
+# Start App without zsh
+source venv/bin/activate
+
+flask --app main.py --debug run --port=3306
+
 ```
